@@ -11,8 +11,8 @@ Round 1 was [carried out](https://github.com/MichalStrehovsky/sizegame/actions/r
 Rank | Language | Size (kB) | Compiler | Notes
 ---- | -------- | ---- | -------- | -----
 1 | Assembly | 2 | Microsoft Macro Assembler Version 14.34.31937.0 |  
-2 | Zig | 5 | 0.11.0-dev.1718+2737dce84 |  
-3 | C | 135 | Microsoft C/C++ Optimizing Compiler Version 19.34.31937 for x64 |  
+1 | C | 2 | Tiny C Compiler 0.9.27 on Windows NT x64 |  
+3 | Zig | 5 | 0.11.0-dev.1718+2737dce84 |  
 4 | C++ | 230 | Microsoft C/C++ Optimizing Compiler Version 19.34.31937 for x64 |  
 5 | Rust | 253 | rustc 1.67.1 (d5a82bbd2 2023-02-07) |  
 6 | C# | 1814 | 8.0.100-preview.1.23115.2 |  
