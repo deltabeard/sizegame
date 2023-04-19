@@ -125,6 +125,31 @@ jobs:
           dart/hello.exe
           dart/info.txt
 
+  build_fsharp:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.100-preview.1.23115.2'
+    - name: Build
+      shell: cmd
+      run: |
+        cd fsharp
+        dotnet --info
+        dotnet publish -p:PublishAot=true
+        (
+        echo LANGUAGE=F-sharp
+        echo COMPILER=8.0.100-preview.1.23115.2
+        )>bin\Release\net8.0\win-x64\publish\info.txt
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: fsharp
+        path: |
+          fsharp/bin/Release/net8.0/win-x64/publish/hello.exe
+          fsharp/bin/Release/net8.0/win-x64/publish/info.txt
+
   build_go:
     runs-on: windows-latest
     steps:
@@ -186,6 +211,54 @@ jobs:
           java/vcruntime140.dll
           java/info.txt
 
+  build_kotlin:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: fwilhe2/setup-kotlin@main
+        with:
+          install-native: true
+      - name: Build
+        shell: cmd
+        run: |
+          cd kotlin
+          call kotlinc-native hello.kt -o hello -opt
+          call kotlinc-native -version
+          (
+          echo LANGUAGE=Kotlin
+          echo COMPILER=kotlinc-native 1.18.10
+          )>info.txt
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: kotlin
+          path: |
+            kotlin/hello.exe
+            kotlin/info.txt
+            
+  build_nim:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: jiro4989/setup-nim-action@v1
+      - name: Build
+        shell: cmd
+        run: |
+          cd nim
+          nim c -d:release hello.nim
+          nim --version
+          (
+          echo LANGUAGE=Nim
+          echo COMPILER=nim 1.6.10
+          )>info.txt
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: nim
+          path: |
+            nim/hello.exe
+            nim/info.txt
+            
   build_rust:
     runs-on: windows-latest
     steps:
@@ -209,6 +282,31 @@ jobs:
         path: |
           rust/hello.exe
           rust/info.txt
+
+  build_scala:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: olafurpg/setup-scala@v14
+        with:
+         java-version: adopt@
+      - name: Build
+        shell: cmd
+        run: |
+          cd scala
+          call sbt run
+          call sbt --version
+          (
+          echo LANGUAGE=Scala
+          echo COMPILER=Scala 3.2.2 Scala-native 0.4.10
+          )>target\scala-3.2.2\info.txt
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: scala
+          path: |
+            scala/target/scala-3.2.2/scala-out.exe
+            scala/target/scala-3.2.2/info.txt
 
   build_swift:
     runs-on: windows-latest
@@ -273,7 +371,7 @@ jobs:
           zig/info.txt
 
   summarize:
-    needs: [build_asm, build_c, build_cpp, build_csharp, build_dart, build_go, build_java, build_rust, build_swift, build_zig]
+    needs: [build_asm, build_c, build_cpp, build_csharp, build_dart, build_fsharp, build_go, build_java, build_kotlin, build_nim, build_rust, build_scala, build_swift, build_zig]
     runs-on: windows-latest
     steps:
       - name: Download all artifacts
